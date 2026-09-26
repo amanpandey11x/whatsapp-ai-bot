@@ -1,0 +1,194 @@
+{
+  "version": "6.3",
+  "data_api_version": "3.0",
+  "routing_model": {
+    "ITR_TYPE": ["ADDONS"],
+    "ADDONS": []
+  },
+  "screens": [
+    {
+      "id": "ITR_TYPE",
+      "title": "ITR Filing",
+      "data": {
+        "itr_type_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          },
+          "__example__": [
+            { "id": "itr_salary", "title": "ITR Salary Filing", "description": "Salaried income" }
+          ]
+        },
+        "salary_addon_options": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "description": { "type": "string" } } },
+          "__example__": [{ "id": "itr_capital_gains", "title": "Capital Gains", "description": "₹999" }]
+        },
+        "business_addon_options": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "description": { "type": "string" } } },
+          "__example__": [{ "id": "itr_business_capital_gains", "title": "Capital Gains", "description": "₹999" }]
+        },
+        "nri_addon_options": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "description": { "type": "string" } } },
+          "__example__": [{ "id": "itr_nri_capital_gains", "title": "Capital Gains", "description": "₹999" }]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "type_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Which ITR filing do you need?"
+              },
+              {
+                "type": "RadioButtonsGroup",
+                "name": "itr_type",
+                "label": "ITR type",
+                "data-source": "${data.itr_type_options}",
+                "required": true
+              }
+            ]
+          },
+          {
+            "type": "Footer",
+            "label": "Next",
+            "on-click-action": {
+              "name": "navigate",
+              "next": { "type": "screen", "name": "ADDONS" },
+              "payload": {
+                "itr_type": "${form.itr_type}",
+                "salary_addon_options": "${data.salary_addon_options}",
+                "business_addon_options": "${data.business_addon_options}",
+                "nri_addon_options": "${data.nri_addon_options}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ADDONS",
+      "title": "Add-ons",
+      "terminal": true,
+      "data": {
+        "itr_type": {
+          "type": "string",
+          "__example__": "itr_salary"
+        },
+        "salary_addon_options": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "description": { "type": "string" } } },
+          "__example__": [{ "id": "itr_capital_gains", "title": "Capital Gains", "description": "₹999" }]
+        },
+        "business_addon_options": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "description": { "type": "string" } } },
+          "__example__": [{ "id": "itr_business_capital_gains", "title": "Capital Gains", "description": "₹999" }]
+        },
+        "nri_addon_options": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "description": { "type": "string" } } },
+          "__example__": [{ "id": "itr_nri_capital_gains", "title": "Capital Gains", "description": "₹999" }]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "addon_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Select every add-on that applies"
+              },
+              {
+                "type": "If",
+                "condition": "${data.itr_type} == 'itr_salary'",
+                "then": [
+                  {
+                    "type": "CheckboxGroup",
+                    "name": "addons_salary",
+                    "label": "Add-ons",
+                    "data-source": "${data.salary_addon_options}",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "type": "If",
+                "condition": "${data.itr_type} == 'itr_business'",
+                "then": [
+                  {
+                    "type": "CheckboxGroup",
+                    "name": "addons_business",
+                    "label": "Add-ons",
+                    "data-source": "${data.business_addon_options}",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "type": "If",
+                "condition": "${data.itr_type} == 'itr_nri'",
+                "then": [
+                  {
+                    "type": "CheckboxGroup",
+                    "name": "addons_nri",
+                    "label": "Add-ons",
+                    "data-source": "${data.nri_addon_options}",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "type": "TextBody",
+                "text": "Have House Property or a Partnership firm? Enter how many below (leave blank if not applicable)."
+              },
+              {
+                "type": "TextInput",
+                "name": "house_property_qty",
+                "label": "House Property — how many?",
+                "input-type": "number",
+                "required": false
+              },
+              {
+                "type": "TextInput",
+                "name": "partnership_qty",
+                "label": "Partnership firms — how many?",
+                "input-type": "number",
+                "required": false
+              }
+            ]
+          },
+          {
+            "type": "Footer",
+            "label": "Submit",
+            "on-click-action": {
+              "name": "complete",
+              "payload": {
+                "itr_type": "${data.itr_type}",
+                "addons_salary": "${form.addons_salary}",
+                "addons_business": "${form.addons_business}",
+                "addons_nri": "${form.addons_nri}",
+                "house_property_qty": "${form.house_property_qty}",
+                "partnership_qty": "${form.partnership_qty}"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

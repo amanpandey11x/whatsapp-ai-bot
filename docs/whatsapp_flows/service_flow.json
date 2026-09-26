@@ -1,0 +1,768 @@
+{
+  "version": "6.3",
+  "data_api_version": "3.0",
+  "routing_model": {
+    "SERVICE": [
+      "ITR_TYPE",
+      "GST_FILING",
+      "TDS_FILING",
+      "BUSINESS_REG",
+      "NOTICES",
+      "BOOK_EXPERT",
+      "COMING_SOON",
+      "ERROR"
+    ],
+    "ITR_TYPE": [
+      "ITR_ADDONS",
+      "REVIEW",
+      "ERROR"
+    ],
+    "ITR_ADDONS": [
+      "REVIEW",
+      "ERROR"
+    ],
+    "GST_FILING": [
+      "REVIEW",
+      "ERROR"
+    ],
+    "TDS_FILING": [
+      "REVIEW",
+      "ERROR"
+    ],
+    "BUSINESS_REG": [
+      "REVIEW",
+      "ERROR"
+    ],
+    "NOTICES": [
+      "REVIEW",
+      "ERROR"
+    ],
+    "BOOK_EXPERT": [
+      "REVIEW",
+      "ERROR"
+    ],
+    "REVIEW": [],
+    "COMING_SOON": [],
+    "ERROR": []
+  },
+  "screens": [
+    {
+      "id": "SERVICE",
+      "title": "TaxPlan Advisors",
+      "data": {
+        "show_first_time_question": {
+          "type": "boolean",
+          "__example__": true
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "service_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "What can we help you with today?"
+              },
+              {
+                "type": "RadioButtonsGroup",
+                "name": "service",
+                "label": "Service",
+                "data-source": [
+                  {
+                    "id": "itr",
+                    "title": "ITR Filing",
+                    "description": "Income tax return filing — from ₹599"
+                  },
+                  {
+                    "id": "gst",
+                    "title": "GST Filing",
+                    "description": "GST returns & registration — from ₹0"
+                  },
+                  {
+                    "id": "tds_filing",
+                    "title": "TDS Filing",
+                    "description": "TDS payment & return filing — from ₹499"
+                  },
+                  {
+                    "id": "business_reg",
+                    "title": "Business Registration",
+                    "description": "PAN, TAN, company setup & more — from ₹499"
+                  },
+                  {
+                    "id": "notices",
+                    "title": "Notices",
+                    "description": "Help with a tax notice — from ₹19,999"
+                  },
+                  {
+                    "id": "book_expert",
+                    "title": "Book Expert",
+                    "description": "Talk to a tax expert — from ₹999"
+                  }
+                ],
+                "required": true
+              },
+              {
+                "type": "If",
+                "condition": "${data.show_first_time_question} == true",
+                "then": [
+                  {
+                    "type": "RadioButtonsGroup",
+                    "name": "first_time",
+                    "label": "First time filing with us?",
+                    "data-source": [
+                      {
+                        "id": "yes",
+                        "title": "Yes",
+                        "description": "This is my first time"
+                      },
+                      {
+                        "id": "no",
+                        "title": "No",
+                        "description": "I've filed with you before"
+                      }
+                    ],
+                    "required": true
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "Next",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "selected_service": "${form.service}",
+                    "first_time": "${form.first_time}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "ITR_TYPE",
+      "title": "ITR Filing",
+      "data": {
+        "itr_type_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "itr_salary",
+              "title": "ITR Salary Filing",
+              "description": "₹1,999 onwards"
+            }
+          ]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "itr_type_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Which ITR filing do you need?"
+              },
+              {
+                "type": "RadioButtonsGroup",
+                "name": "itr_type",
+                "label": "ITR type",
+                "data-source": "${data.itr_type_options}",
+                "required": true
+              },
+              {
+                "type": "TextCaption",
+                "text": "You can use the back arrow above anytime to pick a different service."
+              },
+              {
+                "type": "Footer",
+                "label": "Next",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "itr_type": "${form.itr_type}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "ITR_ADDONS",
+      "title": "Add-ons",
+      "data": {
+        "itr_type": {
+          "type": "string",
+          "__example__": "itr_salary"
+        },
+        "itr_type_label": {
+          "type": "string",
+          "__example__": "ITR Salary Filing"
+        },
+        "addon_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "itr_capital_gains",
+              "title": "Capital Gains",
+              "description": "₹999"
+            }
+          ]
+        },
+        "show_house_property": {
+          "type": "boolean",
+          "__example__": true
+        },
+        "show_partnership": {
+          "type": "boolean",
+          "__example__": true
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "itr_addons_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "${data.itr_type_label} — add-ons"
+              },
+              {
+                "type": "TextBody",
+                "text": "Basic Salary, Interest, and Indian Dividend income are already included. Tick anything else that applies — you can select more than one. Your total appears on the next screen."
+              },
+              {
+                "type": "CheckboxGroup",
+                "name": "addons",
+                "label": "Add-ons",
+                "data-source": "${data.addon_options}",
+                "required": false
+              },
+              {
+                "type": "If",
+                "condition": "${data.show_house_property} == true",
+                "then": [
+                  {
+                    "type": "TextInput",
+                    "name": "house_property_qty",
+                    "label": "House Property",
+                    "helper-text": "How many? ₹99 each — leave blank if none",
+                    "input-type": "number",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "type": "If",
+                "condition": "${data.show_partnership} == true",
+                "then": [
+                  {
+                    "type": "TextInput",
+                    "name": "partnership_qty",
+                    "label": "Partnership Firms",
+                    "helper-text": "How many? ₹499 each — leave blank if none",
+                    "input-type": "number",
+                    "required": false
+                  }
+                ]
+              },
+              {
+                "type": "Footer",
+                "label": "Continue",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "itr_type": "${data.itr_type}",
+                    "addons": "${form.addons}",
+                    "house_property_qty": "${form.house_property_qty}",
+                    "partnership_qty": "${form.partnership_qty}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "GST_FILING",
+      "title": "GST Filing",
+      "data": {
+        "gst_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "gst_nil_return",
+              "title": "Nil Return / Dormant GSTIN",
+              "description": "From ₹0"
+            }
+          ]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "gst_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Which GST filings do you need?"
+              },
+              {
+                "type": "TextBody",
+                "text": "Tick every filing that applies — you can select more than one. Prices are shown next to each item; your total appears on the next screen."
+              },
+              {
+                "type": "CheckboxGroup",
+                "name": "gst_filings",
+                "label": "GST filings",
+                "data-source": "${data.gst_options}",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Continue",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "gst_filings": "${form.gst_filings}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "TDS_FILING",
+      "title": "TDS Filing",
+      "data": {
+        "tds_filing_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "tds_monthly_payment",
+              "title": "TDS Monthly Payment",
+              "description": "₹499 per month"
+            }
+          ]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "tds_filing_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Which TDS filings do you need?"
+              },
+              {
+                "type": "TextBody",
+                "text": "Tick every filing that applies — you can select more than one. Prices are shown next to each item; your total appears on the next screen."
+              },
+              {
+                "type": "CheckboxGroup",
+                "name": "tds_filing_items",
+                "label": "TDS filings",
+                "data-source": "${data.tds_filing_options}",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Continue",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "tds_filing_items": "${form.tds_filing_items}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "BUSINESS_REG",
+      "title": "Business Registration",
+      "data": {
+        "business_reg_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "bizreg_pan_application",
+              "title": "PAN Application",
+              "description": "₹499"
+            }
+          ]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "business_reg_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Which registration services do you need?"
+              },
+              {
+                "type": "TextBody",
+                "text": "Tick every service that applies — you can select more than one. Prices are shown next to each item; your total appears on the next screen."
+              },
+              {
+                "type": "CheckboxGroup",
+                "name": "business_reg_items",
+                "label": "Registration services",
+                "data-source": "${data.business_reg_options}",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Continue",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "business_reg_items": "${form.business_reg_items}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "NOTICES",
+      "title": "Notices",
+      "data": {
+        "notice_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "notice_itr_appeal",
+              "title": "ITR Appeal",
+              "description": "₹49,999"
+            }
+          ]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "notices_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "Which notice do you need help with?"
+              },
+              {
+                "type": "TextBody",
+                "text": "Tick every case that applies — you can select more than one. Prices are shown next to each item; your total appears on the next screen."
+              },
+              {
+                "type": "CheckboxGroup",
+                "name": "notice_items",
+                "label": "Notices",
+                "data-source": "${data.notice_options}",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Continue",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "notice_items": "${form.notice_items}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "BOOK_EXPERT",
+      "title": "Book an Expert",
+      "data": {
+        "consult_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          },
+          "__example__": [
+            {
+              "id": "consult_tax",
+              "title": "Tax Consultation",
+              "description": "₹999 — 30-minute session."
+            }
+          ]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "Form",
+            "name": "book_expert_form",
+            "children": [
+              {
+                "type": "TextHeading",
+                "text": "What would you like to talk to an expert about?"
+              },
+              {
+                "type": "TextBody",
+                "text": "Every session is 30 minutes — tick every topic you'd like to cover, you can select more than one. Prices are shown next to each item; your total appears on the next screen."
+              },
+              {
+                "type": "CheckboxGroup",
+                "name": "consult_items",
+                "label": "Consultation topics",
+                "data-source": "${data.consult_options}",
+                "required": true
+              },
+              {
+                "type": "Footer",
+                "label": "Continue",
+                "on-click-action": {
+                  "name": "data_exchange",
+                  "payload": {
+                    "consult_items": "${form.consult_items}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "REVIEW",
+      "title": "Review",
+      "terminal": true,
+      "data": {
+        "summary_text": {
+          "type": "string",
+          "__example__": "• ITR Salary Filing — Included"
+        },
+        "total_display": {
+          "type": "string",
+          "__example__": "₹1,999"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "Here's what you've selected"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.summary_text}"
+          },
+          {
+            "type": "TextSubheading",
+            "text": "Total: ${data.total_display}"
+          },
+          {
+            "type": "Footer",
+            "label": "Confirm",
+            "on-click-action": {
+              "name": "complete",
+              "payload": {
+                "summary_text": "${data.summary_text}",
+                "total_display": "${data.total_display}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "COMING_SOON",
+      "title": "Coming soon",
+      "terminal": true,
+      "data": {
+        "category_name": {
+          "type": "string",
+          "__example__": "Business Registration"
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "${data.category_name}"
+          },
+          {
+            "type": "TextBody",
+            "text": "We're finalizing this service on WhatsApp — reply HELP in chat and our team will take it from there."
+          },
+          {
+            "type": "Footer",
+            "label": "Got it",
+            "on-click-action": {
+              "name": "complete",
+              "payload": {
+                "category_name": "${data.category_name}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ERROR",
+      "title": "Something went wrong",
+      "terminal": true,
+      "data": {
+        "message": {
+          "type": "string",
+          "__example__": "Something went wrong — please try again."
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "TextHeading",
+            "text": "Something went wrong"
+          },
+          {
+            "type": "TextBody",
+            "text": "${data.message}"
+          },
+          {
+            "type": "Footer",
+            "label": "Close",
+            "on-click-action": {
+              "name": "complete",
+              "payload": {
+                "message": "${data.message}"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

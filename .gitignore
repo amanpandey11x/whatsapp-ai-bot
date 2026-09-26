@@ -1,0 +1,44 @@
+venv/
+.env
+__pycache__/
+*.pyc
+db.sqlite3
+.vscode/settings.json
+*.log
+
+# WhatsApp Flow endpoint's RSA private key — never commit this.
+whatsapp_bot/keys/
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Django database
+db.sqlite3
+*.sqlite3
+*.sqlite3.bak*
+
+# Celery
+celerybeat-schedule*
+celerybeat.pid
+
+# Generated media
+media/
+
+# IDE
+.vscode/
+
+# Temporary / generated files
+*.bak
+*.tmp
+
+# Local junk files
+nul
+cd
+celery
+Untitled.txt
+contact814.txt
+silence_scan.txt
